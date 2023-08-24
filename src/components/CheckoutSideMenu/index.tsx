@@ -1,9 +1,14 @@
 import { XMarkIcon } from '@heroicons/react/24/solid'
 
 import { useGlobalContext } from '../../context'
+import { OrderCard } from '../OrderCard'
 
 export const CheckoutSideMenu = (): JSX.Element => {
-  const { isCheckoutSideMenuOpen, closeCheckoutSideMenu } = useGlobalContext()
+  const {
+    isCheckoutSideMenuOpen,
+    closeCheckoutSideMenu,
+    cartProducts
+  } = useGlobalContext()
 
   return (
         <aside
@@ -14,6 +19,16 @@ export const CheckoutSideMenu = (): JSX.Element => {
                 <XMarkIcon className='h-6 w-6 cursor-pointer text-black'
                     onClick={() => { closeCheckoutSideMenu() }} />
             </div>
+            {
+                cartProducts?.map(cart => (
+                    <OrderCard
+                        key={cart.id}
+                        title={cart.title}
+                        images={cart.images}
+                        price={cart.price}
+                    />
+                ))
+            }
         </aside>
   )
 }

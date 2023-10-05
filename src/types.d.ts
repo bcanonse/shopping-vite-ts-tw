@@ -15,6 +15,8 @@ export interface Product {
   category?: Category
 }
 
+export type ProductParm = Pick<Product, 'id' | 'title' | 'images' | 'price'>
+
 export type ProductId = Pick<Product, 'id'>
 
 export type ProductShow = Omit<Product, 'id'>

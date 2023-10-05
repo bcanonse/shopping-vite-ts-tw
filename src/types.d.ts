@@ -15,6 +15,8 @@ export interface Product {
   category?: Category
 }
 
+export type ProductId = Pick<Product, 'id'>
+
 export type ProductShow = Omit<Product, 'id'>
 
 export interface GlobalContent {

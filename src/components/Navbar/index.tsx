@@ -86,13 +86,9 @@ export const Navbar = (): JSX.Element => {
                         Sign In
                     </NavLink>
                 </li>
-                <li className='hover:underline cursor-pointer'>
-                    <div className='relative'>
-                        <ShoppingCartIcon className='h-6 w-6' />
-                        <div className="absolute text-[10px] text-sm -top-[2px] -right-[5px] bg-blue-500 w-[14px] h-[14px] rounded-full text-white">
-                            <p className="flex items-center justify-center -mt-[1px] mb-1">{count}</p>
-                        </div>
-                    </div>
+                <li className='flex items-center text-black'>
+                    <ShoppingCartIcon className='h-6 w-6' />
+                    <p>{count}</p>
                 </li>
             </ul>
         </nav>

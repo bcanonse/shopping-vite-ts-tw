@@ -2,7 +2,7 @@ import { XMarkIcon } from '@heroicons/react/24/solid'
 import { type ProductId, type ProductParm as ProductType } from '../../types'
 
 interface Props extends ProductType {
-  handleDelete: ({ id }: ProductId) => void
+  handleDelete?: ({ id }: ProductId) => void
 }
 
 export const OrderCard: React.FC<Props> = ({
@@ -25,10 +25,11 @@ export const OrderCard: React.FC<Props> = ({
             </div>
             <div className='flex items-center gap-2'>
                 <p className='text-lg font-medium'>{price.toFixed(2)}</p>
-                <XMarkIcon
+                { (handleDelete != null) &&
+                 <XMarkIcon
                     className='h-6 w-6 text-black cursor-pointer'
                     onClick={() => { handleDelete({ id }) }}
-                />
+                />}
             </div>
         </div>
   )

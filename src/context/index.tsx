@@ -29,7 +29,13 @@ const ShoppingCartContext = createContext<GlobalContent>({
     date: new Date(),
     totalPrice: 0,
     totalProducts: 0,
-    products: []
+    products: [{
+      id: 0,
+      title: '',
+      price: 0,
+      description: '',
+      images: []
+    }]
   }],
   setOrder: () => { }
 })

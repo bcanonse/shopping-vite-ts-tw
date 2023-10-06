@@ -2,20 +2,40 @@ import { XMarkIcon } from '@heroicons/react/24/solid'
 
 import { useGlobalContext } from '../../context'
 import { OrderCard } from '../OrderCard'
-import { type ProductId } from '../../types'
-import { totalPriceWithFormat } from '../../utils'
+import { type Order, type ProductId } from '../../types'
+import { totalPrice, totalPriceWithFormat } from '../../utils'
 
 export const CheckoutSideMenu = (): JSX.Element => {
   const {
     isCheckoutSideMenuOpen,
     closeCheckoutSideMenu,
     cartProducts,
-    setCartProducts
+    setCartProducts,
+    setOrder,
+    order,
+    setCount,
+    count
   } = useGlobalContext()
 
   const handleDelete = ({ id }: ProductId): void => {
     const filteredProducts = cartProducts?.filter(item => item.id !== id)
     setCartProducts(filteredProducts)
+    setCount(count - 1)
+  }
+
+  const handleCheckout = (): void => {
+    if (cartProducts.length === 0) return
+
+    const orderToAdd: Order = {
+      date: new Date(),
+      products: cartProducts,
+      totalProducts: cartProducts.length,
+      totalPrice: totalPrice(cartProducts)
+    }
+
+    setOrder([...order, orderToAdd])
+    setCartProducts([])
+    setCount(0)
   }
 
   return (
@@ -27,7 +47,7 @@ export const CheckoutSideMenu = (): JSX.Element => {
                 <XMarkIcon className='h-6 w-6 cursor-pointer text-black'
                     onClick={() => { closeCheckoutSideMenu() }} />
             </div>
-            <div className='px-6 overflow-y-auto h-full'>
+            <div className='px-6 overflow-y-auto flex-1'>
                 {
                     cartProducts?.map(cart => (
                         <OrderCard
@@ -41,12 +61,17 @@ export const CheckoutSideMenu = (): JSX.Element => {
                     ))
                 }
             </div>
-            <div className='px-6'>
-                <p className='flex justify-between items-center'>
+            <div className='px-6 mb-6'>
+                <p className='flex justify-between items-center mb-2'>
                     <span className='font-medium text-2xl'>Total:</span>
                     <span className='font-medium text-2xl'>{totalPriceWithFormat(cartProducts)}</span>
                 </p>
+                <button
+                    className='bg-black py-3 text-white w-full rounded-lg'
+                    onClick={() => { handleCheckout() }}
+                >Checkout</button>
             </div>
+
         </aside>
   )
 }

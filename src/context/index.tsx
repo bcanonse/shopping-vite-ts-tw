@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react'
-import { type GlobalContent, type ChildrenProps, type ProductShow, type Product } from '../types'
+import { type GlobalContent, type ChildrenProps, type ProductShow, type Product, type ListOfOrders } from '../types'
 
 const ShoppingCartContext = createContext<GlobalContent>({
   count: 0,
@@ -24,7 +24,14 @@ const ShoppingCartContext = createContext<GlobalContent>({
     images: []
   }],
   openCheckoutSideMenu: () => { },
-  setCartProducts: () => { }
+  setCartProducts: () => { },
+  order: [{
+    date: new Date(),
+    totalPrice: 0,
+    totalProducts: 0,
+    products: []
+  }],
+  setOrder: () => { }
 })
 
 export const useGlobalContext = (): GlobalContent => useContext(ShoppingCartContext)
@@ -53,22 +60,27 @@ export const ShoppingCartProvider: React.FC<ChildrenProps> = ({ children }) => {
   // Shopping cart - Add products to cart
   const [cartProducts, setCartProducts] = useState<Product[]>([])
 
+  // Shopping cart - Add products to cart
+  const [order, setOrder] = useState<ListOfOrders>([])
+
   return (
-        <ShoppingCartContext.Provider value={{
-          count,
-          setCount,
-          openProductDetail,
-          closeProductDetail,
-          isProductDetailOpen,
-          productToShow,
-          setProductToShow,
-          cartProducts,
-          setCartProducts,
-          isCheckoutSideMenuOpen,
-          openCheckoutSideMenu,
-          closeCheckoutSideMenu
-        }}>
-            {children}
-        </ShoppingCartContext.Provider>
+    <ShoppingCartContext.Provider value={{
+      count,
+      setCount,
+      openProductDetail,
+      closeProductDetail,
+      isProductDetailOpen,
+      productToShow,
+      setProductToShow,
+      cartProducts,
+      setCartProducts,
+      isCheckoutSideMenuOpen,
+      openCheckoutSideMenu,
+      closeCheckoutSideMenu,
+      order,
+      setOrder
+    }}>
+      {children}
+    </ShoppingCartContext.Provider>
   )
 }

@@ -15,6 +15,13 @@ export interface Product {
   category?: Category
 }
 
+export interface Order {
+  date: Date
+  products: ListOfProducts
+  totalProducts: number
+  totalPrice: number
+}
+
 export type ProductParm = Pick<Product, 'id' | 'title' | 'images' | 'price'>
 
 export type ProductId = Pick<Product, 'id'>
@@ -34,6 +41,8 @@ export interface GlobalContent {
   productToShow: ProductShow
   cartProducts: ListOfProducts
   setCartProducts: (product: Product[]) => void
+  order: ListOfOrders
+  setOrder: (order: ListOfOrders) => void
 }
 
 interface Route {
@@ -44,3 +53,5 @@ interface Route {
 export type ListOfRoutes = Route[]
 
 export type ListOfProducts = Product[]
+
+export type ListOfOrders = Order[]

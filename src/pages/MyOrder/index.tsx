@@ -1,3 +1,7 @@
+import { NavLink } from 'react-router-dom'
+
+import { ChevronLeftIcon } from '@heroicons/react/24/solid'
+
 import { useGlobalContext } from '../../context'
 
 import { Layout } from '../../components/Layout'
@@ -10,7 +14,12 @@ export const MyOrder = (): JSX.Element => {
 
   return (
     <Layout>
-      <>My order</>
+      <div className='flex w-80 relative justify-center items-center mb-6'>
+        <h1>My order</h1>
+        <NavLink to='/my-orders' className='absolute left-0'>
+          <ChevronLeftIcon className='h-6 w-6 text-black cursor-pointer' />
+        </NavLink>
+      </div>
       <div className='flex flex-col w-80'>
         {
           order?.length > 0

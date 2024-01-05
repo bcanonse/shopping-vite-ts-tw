@@ -11,8 +11,8 @@ export const MyOrders = (): JSX.Element => {
 
   return (
     <Layout>
-      <div className='flex w-80 relative justify-center items-center '>
-        <h1>My orders</h1>
+      <div className='flex w-80 relative justify-center items-center mb-4'>
+        <h1 className='font-medium text-xl'>My orders</h1>
       </div>
       <div>
         {

@@ -1,5 +1,12 @@
-import React, { createContext, useContext, useState } from 'react'
-import { type GlobalContent, type ChildrenProps, type ProductShow, type Product, type ListOfOrders } from '../types'
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import {
+  type GlobalContent,
+  type ChildrenProps,
+  type ProductShow,
+  type Product,
+  type ListOfOrders,
+  type ListOfProducts
+} from '../types'
 
 const ShoppingCartContext = createContext<GlobalContent>({
   count: 0,
@@ -37,7 +44,20 @@ const ShoppingCartContext = createContext<GlobalContent>({
       images: []
     }]
   }],
-  setOrder: () => { }
+  setOrder: () => { },
+  items: [
+    {
+      id: 0,
+      title: '',
+      price: 0,
+      description: '',
+      images: []
+    }
+  ],
+  setItems: () => { },
+  searchByTitle: '',
+  setSearchByTitle: () => {}
+
 })
 
 export const useGlobalContext = (): GlobalContent => useContext(ShoppingCartContext)
@@ -69,6 +89,30 @@ export const ShoppingCartProvider: React.FC<ChildrenProps> = ({ children }) => {
   // Shopping cart - Add products to cart
   const [order, setOrder] = useState<ListOfOrders>([])
 
+  // Get products
+  const [items, setItems] = useState<ListOfProducts>([])
+
+  const getProducts = async (): Promise<void> => {
+    try {
+      const response = await fetch('https://api.escuelajs.co/api/v1/products')
+
+      const data = await response.json()
+
+      setItems(data)
+    } catch (error) {
+      setItems([])
+    }
+  }
+
+  useEffect(() => {
+    void getProducts()
+  }, [])
+
+  // Search items
+  const [searchByTitle, setSearchByTitle] = useState('')
+
+  console.log(searchByTitle)
+
   return (
     <ShoppingCartContext.Provider value={{
       count,
@@ -84,7 +128,11 @@ export const ShoppingCartProvider: React.FC<ChildrenProps> = ({ children }) => {
       openCheckoutSideMenu,
       closeCheckoutSideMenu,
       order,
-      setOrder
+      setOrder,
+      items,
+      setItems,
+      searchByTitle,
+      setSearchByTitle
     }}>
       {children}
     </ShoppingCartContext.Provider>

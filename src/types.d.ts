@@ -43,6 +43,10 @@ export interface GlobalContent {
   setCartProducts: (product: Product[]) => void
   order: ListOfOrders
   setOrder: (order: ListOfOrders) => void
+  items: ListOfProducts
+  setItems: (items: ListOfProducts) => void
+  searchByTitle: string
+  setSearchByTitle: (value: string) => void
 }
 
 interface Route {

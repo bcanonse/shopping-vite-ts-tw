@@ -3,6 +3,10 @@ import Card from '../../components/Card'
 import ProductDetail from '../../components/ProductDetail'
 import { useGlobalContext } from '../../context'
 
+import { useDebouncedCallback } from 'use-debounce'
+
+const WAIT_BETWEEN_CHANGE = 300
+
 const Home = (): JSX.Element => {
   const {
     items,
@@ -11,10 +15,10 @@ const Home = (): JSX.Element => {
     filteredItems
   } = useGlobalContext()
 
-  const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleChangeSearch = useDebouncedCallback((event: React.ChangeEvent<HTMLInputElement>): void => {
     const { value } = event.target
     setSearchByTitle(value)
-  }
+  }, WAIT_BETWEEN_CHANGE)
 
   const renderView = (): JSX.Element | JSX.Element[] => {
     const itemsRendered = searchByTitle?.length > 0

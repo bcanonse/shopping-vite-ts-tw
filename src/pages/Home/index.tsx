@@ -4,16 +4,19 @@ import ProductDetail from '../../components/ProductDetail'
 import { useGlobalContext } from '../../context'
 
 import { useDebouncedCallback } from 'use-debounce'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 const WAIT_BETWEEN_CHANGE = 300
 
 const Home = (): JSX.Element => {
   const {
-    items,
     setSearchByTitle,
-    searchByTitle,
-    filteredItems
+    filteredItems,
+    setCategory
   } = useGlobalContext()
+
+  const { pathname } = useLocation()
 
   const handleChangeSearch = useDebouncedCallback((event: React.ChangeEvent<HTMLInputElement>): void => {
     const { value } = event.target
@@ -21,13 +24,9 @@ const Home = (): JSX.Element => {
   }, WAIT_BETWEEN_CHANGE)
 
   const renderView = (): JSX.Element | JSX.Element[] => {
-    const itemsRendered = searchByTitle?.length > 0
-      ? filteredItems
-      : items
-
-    return itemsRendered?.length > 0
+    return filteredItems?.length > 0
       ? (
-          itemsRendered?.map(item => (
+          filteredItems?.map(item => (
           <Card key={item.id} product={item} />
           ))
         )
@@ -37,6 +36,17 @@ const Home = (): JSX.Element => {
         </div>
         )
   }
+
+  const setCategoryState = (): void => {
+    const category = pathname.substring(pathname.indexOf('/') + 1, pathname.length) ?? ''
+    const categoryUpperCase = category.charAt(0).toUpperCase() + category.slice(1)
+    setCategory(categoryUpperCase.length > 0 ? categoryUpperCase : '')
+    setSearchByTitle('')
+  }
+
+  useEffect(() => {
+    setCategoryState()
+  }, [pathname])
 
   return (
     <Layout>

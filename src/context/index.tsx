@@ -65,8 +65,9 @@ const ShoppingCartContext = createContext<GlobalContent>({
       description: '',
       images: []
     }
-  ]
-
+  ],
+  categories: [],
+  setCategory: () => { }
 })
 
 export const useGlobalContext = (): GlobalContent => useContext(ShoppingCartContext)
@@ -132,11 +133,28 @@ export const ShoppingCartProvider: React.FC<ChildrenProps> = ({ children }) => {
     )
   }
 
+  // Get category filter in navbar
+  const [category, setCategory] = useState('')
+
+  // Get items by category
+  const filteredItemsByCategory = (category: string): ListOfProducts => {
+    if (category?.length === 0) return items
+    return items?.filter(item => item.category?.name === category)
+  }
+
   useEffect(() => {
+    const itemsByCategory = filteredItemsByCategory(category)
     if (searchByTitle?.length > 0) {
-      setFilteredItems(filteredItemsByTitle(items, searchByTitle))
+      setFilteredItems(filteredItemsByTitle(itemsByCategory, searchByTitle))
+    } else {
+      setFilteredItems(itemsByCategory?.length > 0 ? itemsByCategory : items)
     }
-  }, [items, searchByTitle])
+  }, [items, searchByTitle, category])
+
+  // Get categories from products
+  const categoriesSet = new Set(items.map(product => product.category?.name ?? ''))
+
+  const categories = Array.from(categoriesSet)
 
   return (
     <ShoppingCartContext.Provider value={{
@@ -158,7 +176,9 @@ export const ShoppingCartProvider: React.FC<ChildrenProps> = ({ children }) => {
       setItems,
       searchByTitle,
       setSearchByTitle,
-      filteredItems
+      filteredItems,
+      categories,
+      setCategory
     }}>
       {children}
     </ShoppingCartContext.Provider>

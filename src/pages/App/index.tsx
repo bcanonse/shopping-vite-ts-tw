@@ -1,6 +1,6 @@
 import { BrowserRouter, useRoutes } from 'react-router-dom'
 
-import { ShoppingCartProvider } from '../../context'
+import { ShoppingCartProvider, useGlobalContext } from '../../context'
 import Home from '../Home'
 import { MyAccount } from '../MyAccount'
 import { MyOrder } from '../MyOrder'
@@ -12,6 +12,8 @@ import { CheckoutSideMenu } from '../../components/CheckoutSideMenu'
 import { type ListOfRoutes } from '../../types'
 
 const AppRoutes = (): React.ReactElement<any, string | React.JSXElementConstructor<any>> | null => {
+  const { categories } = useGlobalContext()
+
   const routes: ListOfRoutes = [
     {
       path: '/',
@@ -30,6 +32,10 @@ const AppRoutes = (): React.ReactElement<any, string | React.JSXElementConstruct
       element: <MyOrder />
     },
     {
+      path: '/my-orders/:id',
+      element: <MyOrder />
+    },
+    {
       path: '/my-order',
       element: <MyOrder />
     },
@@ -42,6 +48,10 @@ const AppRoutes = (): React.ReactElement<any, string | React.JSXElementConstruct
       element: <NotFound />
     }
   ]
+
+  categories.forEach(element => {
+    routes.push({ path: `/${element.toLowerCase()}`, element: <Home /> })
+  })
 
   return useRoutes(routes)
 }

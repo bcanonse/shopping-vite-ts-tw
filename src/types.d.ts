@@ -48,6 +48,8 @@ export interface GlobalContent {
   searchByTitle: string
   setSearchByTitle: (value: string) => void
   filteredItems: ListOfProducts
+  categories: string[]
+  setCategory: (category: string) => void
 }
 
 interface Route {

@@ -56,7 +56,16 @@ const ShoppingCartContext = createContext<GlobalContent>({
   ],
   setItems: () => { },
   searchByTitle: '',
-  setSearchByTitle: () => {}
+  setSearchByTitle: () => { },
+  filteredItems: [
+    {
+      id: 0,
+      title: '',
+      price: 0,
+      description: '',
+      images: []
+    }
+  ]
 
 })
 
@@ -111,7 +120,23 @@ export const ShoppingCartProvider: React.FC<ChildrenProps> = ({ children }) => {
   // Search items
   const [searchByTitle, setSearchByTitle] = useState('')
 
-  console.log(searchByTitle)
+  // Get filtered products
+  const [filteredItems, setFilteredItems] = useState<ListOfProducts>([])
+
+  const filteredItemsByTitle = (
+    items: ListOfProducts,
+    searchByTitle: string
+  ): ListOfProducts => {
+    return items?.filter(product =>
+      product.title.toLowerCase().includes(searchByTitle.toLowerCase())
+    )
+  }
+
+  useEffect(() => {
+    if (searchByTitle?.length > 0) {
+      setFilteredItems(filteredItemsByTitle(items, searchByTitle))
+    }
+  }, [items, searchByTitle])
 
   return (
     <ShoppingCartContext.Provider value={{
@@ -132,7 +157,8 @@ export const ShoppingCartProvider: React.FC<ChildrenProps> = ({ children }) => {
       items,
       setItems,
       searchByTitle,
-      setSearchByTitle
+      setSearchByTitle,
+      filteredItems
     }}>
       {children}
     </ShoppingCartContext.Provider>

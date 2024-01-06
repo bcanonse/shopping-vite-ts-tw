@@ -4,15 +4,34 @@ import ProductDetail from '../../components/ProductDetail'
 import { useGlobalContext } from '../../context'
 
 const Home = (): JSX.Element => {
-  const { items, setSearchByTitle } = useGlobalContext()
+  const {
+    items,
+    setSearchByTitle,
+    searchByTitle,
+    filteredItems
+  } = useGlobalContext()
 
   const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { value } = event.target
-
-    if (value.length === 0) return
-
-    console.log('Valor')
     setSearchByTitle(value)
+  }
+
+  const renderView = (): JSX.Element | JSX.Element[] => {
+    const itemsRendered = searchByTitle?.length > 0
+      ? filteredItems
+      : items
+
+    return itemsRendered?.length > 0
+      ? (
+          itemsRendered?.map(item => (
+          <Card key={item.id} product={item} />
+          ))
+        )
+      : (
+        <div className='flex justify-center col-span-4 mt-3'>
+          <p className='font-medium text-xl'>There are not matches in the search!</p>
+        </div>
+        )
   }
 
   return (
@@ -27,9 +46,7 @@ const Home = (): JSX.Element => {
         />
         <div className='grid gap-4 grid-cols-4 w-full max-w-screen-lg'>
           {
-            items?.map(item => (
-              <Card key={item.id} product={item} />
-            ))
+            renderView()
           }
         </div>
         <ProductDetail />

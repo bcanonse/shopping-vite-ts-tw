@@ -47,6 +47,7 @@ export interface GlobalContent {
   setItems: (items: ListOfProducts) => void
   searchByTitle: string
   setSearchByTitle: (value: string) => void
+  filteredItems: ListOfProducts
 }
 
 interface Route {
